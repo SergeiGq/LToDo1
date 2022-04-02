@@ -18,7 +18,8 @@ namespace ToDo1.DataBase.Repository
         }
         public async Task<IEnumerable<ToDoItem>> Get()
         {
-            return await _context.ToDoItems!.ToListAsync();
+            
+            return await _context.ToDoItems!.OrderByDescending(n=>n.CreatedTime).ToListAsync();
         }
 
         public async Task Add(string name, string description)
@@ -33,6 +34,25 @@ namespace ToDo1.DataBase.Repository
                 CreatedTime = DateTime.UtcNow,
                 ChangedTime = DateTime.UtcNow
             });
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task Delete(Guid id)
+        {
+            ToDoItem customer = new ToDoItem() { Id = id };
+            _context.ToDoItems.Attach(customer);
+            _context.ToDoItems.Remove(customer);
+            await _context.SaveChangesAsync();
+
+
+
+        }
+
+        public async Task Update(Guid id, bool done)
+        {
+            ToDoItem item =await _context.ToDoItems.FirstAsync(n=>n.Id==id);
+            
+            item.Done = done;
             await _context.SaveChangesAsync();
         }
     }

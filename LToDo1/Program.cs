@@ -11,6 +11,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddRepository();
+builder.Services.AddCors();
 
 var conectionstring = builder.Configuration.GetConnectionString("default");
 builder.Services.AddNpgsql<ToDoDbContext>(conectionstring);
@@ -29,6 +30,12 @@ using (var scope = app.Services.CreateScope())
     todoDbContext.Database.Migrate();
 };
 app.UseHttpsRedirection();
+
+app.UseCors(x=>x
+  .AllowAnyMethod()
+.AllowAnyHeader()
+                .SetIsOriginAllowed(origin => true) // allow any origin
+                .AllowCredentials()); 
 
 app.UseAuthorization();
 

@@ -9,26 +9,37 @@ namespace LToDo1.Controllers
     [Route("[controller]")]
     public class ToDoController : ControllerBase
     {
-      
+
 
         private readonly ILogger<ToDoController> _logger;
         private readonly ToDoItemRepository _toDoItemRepository;
 
-        public ToDoController(ILogger<ToDoController> logger,ToDoItemRepository toDoItemRepository )
+        public ToDoController(ILogger<ToDoController> logger, ToDoItemRepository toDoItemRepository)
         {
             _logger = logger;
             _toDoItemRepository = toDoItemRepository;
         }
 
         [HttpGet]
-        public async  Task<IEnumerable<ToDoItem>> Get()
+        public async Task<IEnumerable<ToDoItem>> Get()
         {
             return await _toDoItemRepository.Get();
         }
         [HttpPost]
         public async Task Post(CreateToDoItemRequest request)
         {
-             await _toDoItemRepository.Add(request.Name, request.Description);
+            await _toDoItemRepository.Add(request.Name, request.Description);
         }
+        [HttpDelete]
+        public async Task Delete(Guid id)
+        {
+            await _toDoItemRepository.Delete(id);
+        }
+        [HttpPatch]
+        public async Task Patch(Guid id,bool done)
+        {
+            await _toDoItemRepository.Update(id,done);
+        }
+
     }
 }
