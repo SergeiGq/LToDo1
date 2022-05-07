@@ -16,24 +16,26 @@ namespace ToDo1.DataBase.Repository
         {
             _context = context;
         }
-        public async Task<IEnumerable<ToDoItem>> Get()
+        public async Task<IEnumerable<ToDoItem>> Get(Guid userid)
         {
             
-            return await _context.ToDoItems!.OrderByDescending(n=>n.CreatedTime).ToListAsync();
+            return await _context.ToDoItems!.Where(n=>n.UserId==userid).OrderByDescending(n=>n.CreatedTime).ToListAsync();
+        
         }
 
-        public async Task Add(string name, string description)
+        public async Task Add(string name, string description, Guid id)
         {
-           await _context.ToDoItems!.AddAsync(new ToDoItem
+            await _context.ToDoItems!.AddAsync(new ToDoItem
             {
-                
+
                 Id = Guid.NewGuid(),
                 Name = name,
                 Discription = description,
                 Done = false,
                 CreatedTime = DateTime.UtcNow,
-                ChangedTime = DateTime.UtcNow
-            });
+                ChangedTime = DateTime.UtcNow,
+                UserId = id
+            }) ;
             await _context.SaveChangesAsync();
         }
 

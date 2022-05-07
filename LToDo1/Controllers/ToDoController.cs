@@ -1,5 +1,7 @@
 using LToDo1.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using ToDo1.DataBase.Models;
 using ToDo1.DataBase.Repository;
 
@@ -21,14 +23,19 @@ namespace LToDo1.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IEnumerable<ToDoItem>> Get()
         {
-            return await _toDoItemRepository.Get();
+            var id = Guid.Parse(User.FindFirst("Id").Value);
+            return await _toDoItemRepository.Get(id);
         }
         [HttpPost]
+        [Authorize]
+
         public async Task Post(CreateToDoItemRequest request)
         {
-            await _toDoItemRepository.Add(request.Name, request.Description);
+            var id = Guid.Parse(User.FindFirst("Id").Value);
+            await _toDoItemRepository.Add(request.Name, request.Description,id);
         }
 
         [HttpDelete]

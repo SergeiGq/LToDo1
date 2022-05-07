@@ -14,6 +14,6 @@ namespace ToDo1.DataBase.Models
         public bool Done { get; set; }
         public DateTime CreatedTime { get; set; }
         public DateTime ChangedTime { get; set; }
-
+        public Guid UserId { get;  set; }
     }
 }
