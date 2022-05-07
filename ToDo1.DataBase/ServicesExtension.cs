@@ -13,6 +13,7 @@ namespace ToDo1.DataBase
         public static void  AddRepository(this IServiceCollection collection)
         {
             collection.AddScoped<ToDoItemRepository>();
+            collection.AddScoped<ToDoRegistrRepository>();
 
         }
     }

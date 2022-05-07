@@ -16,6 +16,7 @@ namespace ToDo1.DataBase
 
         }
         public DbSet<ToDoItem>? ToDoItems { get; set; }
+        public DbSet<ToDoRegistr>? ToDoRegistrs { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
 

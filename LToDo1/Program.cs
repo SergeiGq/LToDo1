@@ -30,7 +30,8 @@ using (var scope = app.Services.CreateScope())
     todoDbContext.Database.Migrate();
 };
 app.UseHttpsRedirection();
-
+app.UseDefaultFiles();
+app.UseStaticFiles();
 app.UseCors(x=>x
   .AllowAnyMethod()
 .AllowAnyHeader()

@@ -6,7 +6,7 @@ using ToDo1.DataBase.Repository;
 namespace LToDo1.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("[controller]")] 
     public class ToDoController : ControllerBase
     {
 
@@ -30,6 +30,7 @@ namespace LToDo1.Controllers
         {
             await _toDoItemRepository.Add(request.Name, request.Description);
         }
+
         [HttpDelete]
         public async Task Delete(Guid id)
         {
