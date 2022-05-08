@@ -21,7 +21,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = true,
             ValidAudience = "ToDoAud",
             ValidateLifetime = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("TweeBank_Secret_Secret_Key_x123daa")),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Secret_Secret_Key_x123daa")),
             ValidateIssuerSigningKey = true
         };
     });

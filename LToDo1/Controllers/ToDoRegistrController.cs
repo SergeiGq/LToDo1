@@ -24,7 +24,7 @@ namespace LToDo1.Controllers
         [HttpPost]
         public async Task<string> Post(ToDoRegistrRequest request)
         {
-            var id = await _toDoRegistrRepository.Add(request.Email, request.Password);
+            var id = await _toDoRegistrRepository.Add(request.Email.ToLower(), request.Password);
             var claims = new List<Claim> { new Claim("Id", id.ToString()) };
             // создаем JWT-токен
             var jwt = new JwtSecurityToken(
@@ -32,7 +32,7 @@ namespace LToDo1.Controllers
                     audience: "ToDoAud",
                     claims: claims,
                     expires: DateTime.UtcNow.Add(TimeSpan.FromHours(2)),
-                    signingCredentials: new  SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes("TweeBank_Secret_Secret_Key_x123daa")), SecurityAlgorithms.HmacSha256));
+                    signingCredentials: new  SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Secret_Secret_Key_x123daa")), SecurityAlgorithms.HmacSha256));
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
             return encodedJwt;
 
@@ -41,7 +41,7 @@ namespace LToDo1.Controllers
 
         public async Task<string> Login(ToDoRegistrRequest request)
         {
-            var user = await _toDoRegistrRepository.Get(request.Email, request.Password);
+            var user = await _toDoRegistrRepository.Get(request.Email.ToLower(), request.Password);
             if (user==null )
             {
                 throw new Exception();
@@ -54,7 +54,7 @@ namespace LToDo1.Controllers
                     claims: claims,
                     // как долго токен действует expires
                     expires: DateTime.UtcNow.Add(TimeSpan.FromHours(2)),
-                    signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes("TweeBank_Secret_Secret_Key_x123daa")), SecurityAlgorithms.HmacSha256));
+                    signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Secret_Secret_Key_x123daa")), SecurityAlgorithms.HmacSha256));
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
             return encodedJwt;
 
