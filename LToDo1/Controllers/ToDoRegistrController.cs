@@ -22,7 +22,7 @@ namespace LToDo1.Controllers
 
         private readonly ToDoRegistrRepository _toDoRegistrRepository;
         [HttpPost]
-        public async Task<string> Post(ToDoRegistrRequest request)
+        public async Task<AuthModel> Post(ToDoRegistrRequest request)
         {
             var id = await _toDoRegistrRepository.Add(request.Email.ToLower(), request.Password);
             var claims = new List<Claim> { new Claim("Id", id.ToString()) };
@@ -34,12 +34,12 @@ namespace LToDo1.Controllers
                     expires: DateTime.UtcNow.Add(TimeSpan.FromHours(2)),
                     signingCredentials: new  SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Secret_Secret_Key_x123daa")), SecurityAlgorithms.HmacSha256));
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
-            return encodedJwt;
+            return new AuthModel { Token = encodedJwt};
 
         }
         [HttpPost][Route("Login")]
 
-        public async Task<string> Login(ToDoRegistrRequest request)
+        public async Task<AuthModel> Login(ToDoRegistrRequest request)
         {
             var user = await _toDoRegistrRepository.Get(request.Email.ToLower(), request.Password);
             if (user==null )
@@ -56,7 +56,8 @@ namespace LToDo1.Controllers
                     expires: DateTime.UtcNow.Add(TimeSpan.FromHours(2)),
                     signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Secret_Secret_Key_x123daa")), SecurityAlgorithms.HmacSha256));
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
-            return encodedJwt;
+            
+            return new AuthModel {Token=encodedJwt };
 
         }
         

@@ -9,7 +9,7 @@ using ToDo1.DataBase.Repository;
 namespace LToDo1.Controllers
 {
     [ApiController]
-    [Route("[controller]")] 
+    [Route("[controller]")]
     public class ToDoController : ControllerBase
     {
 
@@ -36,19 +36,23 @@ namespace LToDo1.Controllers
         public async Task Post(CreateToDoItemRequest request)
         {
             var id = Guid.Parse(User.FindFirst("Id").Value);
-            await _toDoItemRepository.Add(request.Name, request.Description,id);
+            await _toDoItemRepository.Add(request.Name, request.Description, id);
         }
 
         [HttpDelete]
+        [Authorize]
         public async Task Delete(Guid id)
         {
-            var id = Guid.Parse(User.FindFirst("Id").Value);
-            await _toDoItemRepository.Delete(id);
+            var userid = Guid.Parse(User.FindFirst("Id").Value);
+            await _toDoItemRepository.Delete(id, userid);
         }
         [HttpPatch]
-        public async Task Patch(Guid id,bool done)
+        [Authorize]
+
+        public async Task Patch(Guid id, bool done)
         {
-            await _toDoItemRepository.Update(id,done);
+            var userid = Guid.Parse(User.FindFirst("Id").Value);
+            await _toDoItemRepository.Update(id, done, userid);
         }
 
     }
