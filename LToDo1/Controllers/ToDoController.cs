@@ -1,3 +1,4 @@
+
 using LToDo1.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -41,6 +42,7 @@ namespace LToDo1.Controllers
         [HttpDelete]
         public async Task Delete(Guid id)
         {
+            var id = Guid.Parse(User.FindFirst("Id").Value);
             await _toDoItemRepository.Delete(id);
         }
         [HttpPatch]

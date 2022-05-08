@@ -39,9 +39,13 @@ namespace ToDo1.DataBase.Repository
             await _context.SaveChangesAsync();
         }
 
-        public async Task Delete(Guid id)
+        public async Task Delete(Guid id,Guid userId)
         {
-            ToDoItem customer = new ToDoItem() { Id = id };
+            if (!_context.ToDoItems.Any(n => n.Id == id && n.UserId == userId))
+            {
+                throw new Exception("no access");
+            }
+            ToDoItem customer = new ToDoItem() { Id = id,UserId=userId };
             _context.ToDoItems.Attach(customer);
             _context.ToDoItems.Remove(customer);
             await _context.SaveChangesAsync();
@@ -50,9 +54,9 @@ namespace ToDo1.DataBase.Repository
 
         }
 
-        public async Task Update(Guid id, bool done)
+        public async Task Update(Guid id, bool done,Guid userid)
         {
-            ToDoItem item =await _context.ToDoItems.FirstAsync(n=>n.Id==id);
+            ToDoItem item =await _context.ToDoItems.FirstAsync(n=>n.Id==id&&n.UserId==userid);
             
             item.Done = done;
             await _context.SaveChangesAsync();
