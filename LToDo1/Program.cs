@@ -1,3 +1,4 @@
+using LToDo1.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.EntityFrameworkCore;
@@ -11,17 +12,21 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddAuthorization();
+
+
+var config = builder.Configuration.GetSection("jwtconfig").Get<Jwtconfig>();
+builder.Services.AddSingleton(config);
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
-            ValidIssuer = "ToDoIssue",
+            ValidIssuer =config.ValidIssuer,
             ValidateAudience = true,
-            ValidAudience = "ToDoAud",
+            ValidAudience = config.ValidAudience,
             ValidateLifetime = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Secret_Secret_Key_x123daa")),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config.IssuerSigningKey)),
             ValidateIssuerSigningKey = true
         };
     });

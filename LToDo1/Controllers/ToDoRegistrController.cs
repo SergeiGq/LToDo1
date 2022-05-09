@@ -14,31 +14,27 @@ namespace LToDo1.Controllers
     [Route("[controller]")]
     public class ToDoRegistrController : Controller
     {
-        public ToDoRegistrController( ToDoRegistrRepository toDoItemRepository)
+        private readonly ToDoRegistrRepository _toDoRegistrRepository;
+        private readonly Jwtconfig _jwtconfig;
+        public ToDoRegistrController(ToDoRegistrRepository toDoItemRepository, Jwtconfig jwtconfig)
         {
 
             _toDoRegistrRepository = toDoItemRepository;
+            this._jwtconfig = jwtconfig;
         }
 
-        private readonly ToDoRegistrRepository _toDoRegistrRepository;
         [HttpPost]
         public async Task<AuthModel> Post(ToDoRegistrRequest request)
         {
             var id = await _toDoRegistrRepository.Add(request.Email.ToLower(), request.Password);
             var claims = new List<Claim> { new Claim("Id", id.ToString()) };
             // создаем JWT-токен
-            var jwt = new JwtSecurityToken(
-                    issuer: "ToDoIssue",
-                    audience: "ToDoAud",
-                    claims: claims,
-                    expires: DateTime.UtcNow.Add(TimeSpan.FromHours(2)),
-                    signingCredentials: new  SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Secret_Secret_Key_x123daa")), SecurityAlgorithms.HmacSha256));
-            var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
-            return new AuthModel { Token = encodedJwt};
-
-        }
-        [HttpPost][Route("Login")]
-
+            string encodedJwt = CreateToken(claims);
+            return new AuthModel { Token = encodedJwt };
+        }           
+            
+        [HttpPost]
+        [Route("Login")]
         public async Task<AuthModel> Login(ToDoRegistrRequest request)
         {
             var user = await _toDoRegistrRepository.Get(request.Email.ToLower(), request.Password);
@@ -48,21 +44,22 @@ namespace LToDo1.Controllers
             }
             var claims = new List<Claim> { new Claim("Id", user.Id.ToString()) };
             // создаем JWT-токен
-            var jwt = new JwtSecurityToken(
-                    issuer: "ToDoIssue",
-                    audience: "ToDoAud",
-                    claims: claims,
-                    // как долго токен действует expires
-                    expires: DateTime.UtcNow.Add(TimeSpan.FromHours(2)),
-                    signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Secret_Secret_Key_x123daa")), SecurityAlgorithms.HmacSha256));
-            var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
-            
+            string encodedJwt = CreateToken(claims);
+
             return new AuthModel {Token=encodedJwt };
 
         }
-        
-        
 
+        private string CreateToken(List<Claim> claims)
+        {
+            var jwt = new JwtSecurityToken(
+                    issuer: _jwtconfig.ValidIssuer,
+                    audience: _jwtconfig.ValidAudience,
+                    claims: claims,
+                    expires: DateTime.UtcNow.Add(TimeSpan.FromHours(2)),
+                    signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtconfig.IssuerSigningKey)), SecurityAlgorithms.HmacSha256));
+            var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
+            return encodedJwt;
+        }
     }
-        
 }
