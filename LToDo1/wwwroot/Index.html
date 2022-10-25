@@ -6,20 +6,26 @@
     <link rel="stylesheet" href="Styles.css" />
 </head>
 <body>
-    <div id="registr">
 
-        <h2> <input id="Login" type="text"></h2>
-        <h2> <input id="Password" type="password"></h2>
-        <button id="registrbutton">Registr</button>
-        <button id="login">Login</button>
+    <div id="registr" class="formregistr">
+        <div class="item">Input login</div>
+        <div><h2> <input id="Login" type="text"></h2></div>
+        <div class="item">Input password</div>
+    <div><h2> <input id="Password" type="password"></h2></div>
+    <div><button id="registrbutton">Registr</button></div>
+    <div><button id="login">Login</button></div>
     </div>
 
     <div id="main">
         <h1><center>ToDoList</center></h1>
-        <center>
-            Name,Discription
-            <input id="Name"><input id="Description"><button onclick="addItem()">Add</button>
-        </center>
+        <div class="container">
+            <div class ='item'>Name</div>
+            <div class="item1"><input id="Name"></div>
+            <div class ='item'>Description</div>
+            <div class="item1"><input id="Description"></div>
+            <button class="btn" onclick="addItem()">Add</button>
+        </div>
+        
 
         <div id="items"></div>
     </div>

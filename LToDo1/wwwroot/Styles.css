@@ -1,7 +1,46 @@
 ﻿body {
-
+background: aquamarine;
 }
 #main{
     display:none;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    
+    
+}
+*{
+    margin: 0 0 0 0;
+}
 
+#registrbutton{
+    margin-bottom: 20px;
+}
+#items{
+    background: red;
+    font-size: 50px;
+    border-radius: 50px;
+}
+#items button{
+   
+}
+
+.formregistr{
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    flex-direction: column;
+}
+.item{
+    font-size: 30px;
+}
+.item1{
+    margin-bottom: 20px;
+}
+.btn{
+    border-radius:20px ;
+    margin-bottom: 50px;
 }
